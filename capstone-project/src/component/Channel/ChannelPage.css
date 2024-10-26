@@ -1,0 +1,131 @@
+/* ChannelPage.css */
+
+.channel-page {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 400;
+}
+
+.channel-card {
+    width: 90%;
+    max-width: 450px;
+    margin-top: 100px; /* Added top margin as requested */
+    padding: 40px;
+    border-radius: 15px; /* Rounded corners */
+    background-color: rgba(255, 255, 255, 0.95); /* Lighter background */
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 90vh; /* Limit height */
+    overflow-y: auto; /* Allow scrolling if content exceeds */
+}
+
+.banner {
+    width: 100%;
+    position: relative;
+    margin-bottom: 20px; /* Spacing between banner and form */
+}
+
+.banner-img {
+    width: 100%;
+    height: 150px; /* Fixed height for banner */
+    border-radius: 10px; /* Rounded corners for banner */
+    object-fit: cover; /* Cover the container */
+}
+
+.profile {
+    position: absolute;
+    top: 50px; /* Adjust position to overlap with the banner */
+    left: 15px; /* Space from left */
+}
+
+.profile-img {
+    width: 80px; /* Fixed size for profile image */
+    height: 80px; /* Fixed size for profile image */
+    border-radius: 50%; /* Circular image */
+    border: 3px solid white; /* Border around profile image */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for profile image */
+}
+
+.channel-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px; /* Increased padding for larger touch area */
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s; /* Smooth transition */
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #007BFF; /* Change border color on focus */
+}
+
+.image-upload {
+    display: flex;
+    flex-direction: column; /* Stack labels vertically */
+    margin: 10px 0; /* Add some spacing */
+}
+
+.image-upload label {
+    margin: 5px 0; /* Spacing between image upload labels */
+}
+
+.submit-button {
+    padding: 12px; /* Increased padding */
+    margin-top: 20px;
+    background-color: #0b509a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    width: 100%; /* Full width */
+}
+
+.submit-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 600px) {
+    .channel-card {
+        padding: 20px; 
+        max-height: 80vh; /* Adjust max height for smaller screens */
+    }
+
+    .input-field {
+        font-size: 14px; 
+    }
+
+    .submit-button {
+        font-size: 14px; 
+    }
+}
+
+@media (max-width: 400px) {
+    .input-field {
+        font-size: 12px; 
+        padding: 8px; 
+    }
+
+    .submit-button {
+        font-size: 12px; 
+    }
+}

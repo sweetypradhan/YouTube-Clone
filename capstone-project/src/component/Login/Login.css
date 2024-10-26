@@ -1,0 +1,106 @@
+.login {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 400;
+}
+
+.login_card {
+    width: 90%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333; /* Darker text for better readability */
+}
+
+.login_form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input_field {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.input_field:focus {
+    outline: none;
+    border-color: #007BFF;
+}
+
+.login_button {
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #0b509a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.login_button:hover {
+    background-color: #0056b3;
+}
+
+.button_group {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+}
+
+.link_button {
+    padding: 10px;
+    margin: 5px 0; 
+    background-color: transparent; 
+    color: #0754a6; 
+    border: 1px solid #007BFF; 
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center; /* Center the text */
+    transition: background-color 0.3s, color 0.3s; 
+    text-decoration: none; /* Remove underline for Link */
+}
+
+.link_button:hover {
+    background-color: #041222; 
+    color: white; 
+}
+
+@media (max-width: 600px) {
+    .login_card {
+        padding: 20px; 
+    }
+
+    .input_field {
+        font-size: 14px; 
+    }
+
+    .login_button,
+    .link_button {
+        font-size: 14px; 
+    }
+}

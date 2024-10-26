@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+.homeSideNavbar{
+    display: flex;
+    flex-direction: column;
+    flex: 0.16 1;
+    box-sizing: border-box;
+    height: 92vh;
+    overflow-y: auto;
+    position: fixed;
+    top: 55px;
+    left: 0px;
+    width: 200px;
+    padding: 14px;
+    background-color: whitesmoke;
+}
+
+.homeSideNavbarHide{
+    display: none;
+}
+
+.homeSideNavbar::-webkit-scrollbar{
+    width: 12px;
+}
+
+.homeSideNavbarTop{
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid grey;
+    padding-bottom: 10px;
+}
+
+.homeSideNavbarTopOption{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    &:hover{
+        background-color: rgb(234, 232, 232);
+    }
+}
+
+.homeSideNavbarTopOptionTitle{
+    font-size: 12px;
+    font-weight: 450;
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+.homeSideNavbarMiddle{
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid grey;
+}
+
+.homeSideNavbarHeader{
+    font-weight: 600;
+}
+
+.homeSideNavbarImg{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
