@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// Create the video Schema
 const videoSchema = mongoose.Schema({
     title: {
         type: String,
@@ -35,7 +36,7 @@ const videoSchema = mongoose.Schema({
         default: 0
     },
     comments: [{
-        type: String // Assuming comments are just strings; you can modify this to a more complex structure if needed
+        type: String 
     }]
 }, { timestamps: true });
 

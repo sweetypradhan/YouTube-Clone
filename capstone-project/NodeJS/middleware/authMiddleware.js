@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-const JWT_SECRET = 'my_super_secret_key_12345'; // Use the same secret key
+const JWT_SECRET = 'my_super_secret_key_12345'; 
 
 export const protect = async (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -10,7 +10,7 @@ export const protect = async (req, res, next) => {
         const token = authHeader.split(' ')[1];
 
         try {
-            const verifiedToken = jwt.verify(token, JWT_SECRET); // Synchronous verification
+            const verifiedToken = jwt.verify(token, JWT_SECRET); // verification
             const user = await User.findById(verifiedToken.id);
             
             if (!user) {

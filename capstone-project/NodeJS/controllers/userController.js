@@ -5,6 +5,8 @@ const JWT_SECRET = 'my_super_secret_key_12345'; // Use your actual secret key
 
 // Register new user
 export const registerUser = async (req, res) => {
+    console.log("Signup request body:", req.body); // Log the incoming request body
+
     const { username, email, password, profilePic } = req.body;
 
     try {
@@ -29,8 +31,6 @@ export const registerUser = async (req, res) => {
         // Generate JWT token
         const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
 
-         // Store the token in localStorage (for client-side code)
-        //  localStorage.setItem('token', token);
 
         // Send response
         res.status(201).json({ token, user: newUser });
@@ -56,9 +56,6 @@ export const loginUser = async (req, res) => {
         // Generate JWT token
         const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
 
-
-        // Store the token in localStorage (for client-side code)
-        // localStorage.setItem('token', token);
 
         res.json({ token, user });
     } catch (error) {

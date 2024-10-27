@@ -17,7 +17,7 @@ const useFetch = (url, method, bodyData, token) => {
           method: method,
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': token ? `JWT ${token}` : undefined, // Include token if provided
+            'Authorization': token ? `JWT ${token}` : undefined, 
           },
           body: JSON.stringify(bodyData),
         });

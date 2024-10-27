@@ -12,21 +12,33 @@ const Video = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [suggestions, setSuggestions] = useState([]); // State for video suggestions
+    const [comments, setComments] = useState([]); // State for comments
+    const [message, setMessage] = useState(""); // State for the comment input
+    const [userProfileImage, setUserProfileImage] = useState(''); // State for the logged-in user's profile image
 
     useEffect(() => {
+        // Retrieve the user's profile image from local storage
+        const profileImage = localStorage.getItem('userProfileImage');
+        if (profileImage) {
+            setUserProfileImage(profileImage);
+        }
+
         const fetchVideo = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/videos/${id}`); // Fetch video details by ID
-                if (!response.ok) {
-                    throw new Error('Failed to fetch video');
-                }
+                const response = await fetch(`http://localhost:8000/api/videos/${id}`);
+                if (!response.ok) throw new Error('Failed to fetch video');
                 const data = await response.json();
                 setVideo(data);
 
-                // Fetch video suggestions after fetching the main video
+                // Fetch video suggestions
                 const suggestionsResponse = await fetch(`http://localhost:8000/api/videos?suggested=true&channelId=${data.channelId._id}`);
                 const suggestionsData = await suggestionsResponse.json();
                 setSuggestions(suggestionsData);
+
+                // Fetch comments for the video
+                const commentsResponse = await fetch(`http://localhost:8000/api/comments/${id}`);
+                const commentsData = await commentsResponse.json();
+                setComments(commentsData);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -37,9 +49,48 @@ const Video = () => {
         fetchVideo();
     }, [id]);
 
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('jwt'); // Retrieve the JWT token from localStorage
+
+        // Retrieve user's username and profile image from localStorage
+        const username = localStorage.getItem('username'); 
+        const profileImage = localStorage.getItem('userProfileImage'); 
+
+        try {
+            const response = await fetch(`http://localhost:8000/api/comments/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `JWT ${token}`,
+                },
+                body: JSON.stringify({ text: message, videoId: id }),
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                console.error(errorResponse);
+                throw new Error('Failed to add comment');
+            }
+
+            const newComment = await response.json();
+            
+            // Add user's profile data to the new comment object
+            newComment.userId = {
+                channelName: username,
+                profilePic: profileImage,
+            };
+
+            setComments((prevComments) => [...prevComments, newComment]); // Update comments
+            setMessage(""); // Clear the input field
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     if (loading) return <p>Loading video...</p>;
     if (error) return <p className="error-message">{error}</p>;
-    if (!video) return null; // No video data
+    if (!video) return null;
 
     // Extract video ID from the YouTube URL
     const getVideoId = (url) => {
@@ -48,13 +99,12 @@ const Video = () => {
         return match ? match[1] : null;
     };
 
-    const youtubeVideoId = getVideoId(video.videoUrl); // Assuming video.videoUrl is a valid YouTube URL
+    const youtubeVideoId = getVideoId(video.videoUrl);
 
     return (
         <div className='video'>
             <div className="videoPostSection">
                 <div className="video_youtube">
-                    {/* Embed YouTube video using iframe */}
                     <iframe
                         width="100%"
                         height="500px"
@@ -72,7 +122,6 @@ const Video = () => {
                             <Link to={`/user/${video.channelId._id}`} className="YT_video_profileBlock_left_img">
                                 <img className='YT_video_profileBlock_left_image' src={video.channelId.profileImage} alt='profile' />
                             </Link>
-
                             <div className="YTvideo_subsView">
                                 <div className="YTpostProfileName">{video.channelId.channelName}</div>
                                 <div className="YTpostProfileSubs">{new Date(video.createdAt).toLocaleDateString()}</div>
@@ -87,6 +136,7 @@ const Video = () => {
                             <div className="YTvideoDivider"></div>
                             <div className="YTvideoLikeBlock_like">
                                 <ThumbDownOffAltIcon />
+                                <div className="YTvideoLikeBlock_NoOfLikes">{video.dislikes}</div>
                             </div>
                             <div className="YTvideoDivider"></div>
                             <div className="YTvideoLikeBlock_like">
@@ -104,54 +154,40 @@ const Video = () => {
                     </div>
                     {/* Comment Section */}
                     <div className="YT_commentSection">
-                <div className="YT_commentSectionTitle">2 comments</div>
-
-                <div className="YT_selfComment">
-                    <img className='YT_selfComment_profile' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTCkZ5qZwRgDe1REogRmfaYbXB8gM0Txgr5EBWkaGVR2FsY_1VO3Y6uCA&s' alt='img' />
-                    <div className="addComment">
-                        <input type="text"  className='addCommentInput' placeholder='Add a comment' />
-
-                        <div className="cancelSubmitComment">
-                            <div className="cancelComment">Cancel</div>
-                            <div className="cancelComment">Comment</div>
+                        <div className="YT_commentSectionTitle">{comments.length} comments</div>
+                        <div className="YT_selfComment">
+                            <img className='YT_selfComment_profile' src={userProfileImage || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTCkZ5qZwRgDe1REogRmfaYbXB8gM0Txgr5EBWkaGVR2FsY_1VO3Y6uCA&s'} alt='profile' />
+                            <div className="addComment">
+                                <form onSubmit={handleCommentSubmit}>
+                                    <input
+                                        type="text"
+                                        value={message}
+                                        onChange={(e) => setMessage(e.target.value)}
+                                        className='addCommentInput'
+                                        placeholder='Add a comment'
+                                    />
+                                    <div className="cancelSubmitComment">
+                                        <div className="cancelComment" onClick={() => setMessage("")}>Cancel</div>
+                                        <button type="submit" className="cancelComment">Comment</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div className="YT_OtherComment">
+                            {comments.map((comment) => (
+                                <div key={comment._id} className="YT_selfComment">
+                                    <img className='YT_selfComment_profile' src={comment.userId.profilePic} alt="profile" />
+                                    <div className="others_commentSection">
+                                        <div className="others_commentSectionHeader">
+                                            <div className="channelName_comment">{comment.userId.username || 'User'}</div>
+                                            <div className="commentTimingOthers">{new Date(comment.createdAt).toLocaleDateString()}</div>
+                                        </div>
+                                        <div className="others_commentSectionComment">{comment.text}</div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                </div>
-
-                <div className="YT_OtherComment">
-                    <div className="YT_selfComment">
-                    <img className='YT_selfComment_profile' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTCkZ5qZwRgDe1REogRmfaYbXB8gM0Txgr5EBWkaGVR2FsY_1VO3Y6uCA&s' alt='img' />
-
-                    <div className="others_commentSection">
-                        <div className="others_commentSectionHeader">
-                            <div className="channelName_comment">UserName</div>
-                            <div className="commentTimingOthers">2024-08-25</div>
-                        </div>
-
-                        <div className="others_commentSectionComment">
-                            This is a great project
-                        </div>
-                    </div>
-                    </div>
-
-
-                    <div className="YT_selfComment">
-                    <img className='YT_selfComment_profile' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTCkZ5qZwRgDe1REogRmfaYbXB8gM0Txgr5EBWkaGVR2FsY_1VO3Y6uCA&s' alt='img' />
-
-                    <div className="others_commentSection">
-                        <div className="others_commentSectionHeader">
-                            <div className="channelName_comment">UserName</div>
-                            <div className="commentTimingOthers">2024-08-25</div>
-                        </div>
-
-                        <div className="others_commentSectionComment">
-                            This is a great project
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        
                 </div>
             </div>
 
@@ -168,10 +204,38 @@ const Video = () => {
                             <div className="video_suggestions_about_profile">{suggestedVideo.views} views . {new Date(suggestedVideo.createdAt).toLocaleDateString()}</div>
                         </div>
                     </div>
-                ))}
+                    ))}
+                </div>
             </div>
-        </div>
-    );
-};
+        );
+     };
 
-export default Video;
+ export default Video;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

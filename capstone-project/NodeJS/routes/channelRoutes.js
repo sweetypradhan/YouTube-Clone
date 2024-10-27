@@ -12,7 +12,7 @@ router.post('/', protect, createChannel);
 router.get('/:channelId', getChannel);
 
 // Route to update a channel (protected, only owner)
-router.put('/:channelId', protect, updateChannel);
+router.put('/:channelId', updateChannel);
 
 // Route to delete a channel (protected, only owner)
 router.delete('/:channelId', protect, deleteChannel);

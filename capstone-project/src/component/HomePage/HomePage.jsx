@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom';
 import '../HomePage/HomePage.css';
 
 const HomePage = ({ sideNavbar }) => {
+  // State to store videos fetched from the API
   const [videos, setVideos] = useState([]);
+  // State to manage loading state
   const [loading, setLoading] = useState(true);
+  // State to manage error messages
   const [error, setError] = useState(null);
 
+  // Options for the filter categories
   const options = [
     "All", "Javascript", "Music", "Skills", "Dance", "React", 
     "Coke studio", "vacation", "Travel", "Webdesign", "interior", 
@@ -14,14 +18,18 @@ const HomePage = ({ sideNavbar }) => {
     "Turkies Drama", "Mongodb Atlas", "Skincare", "Makeup", "H&M"
   ];
 
+   // Fetch videos from the server when the component mounts
   useEffect(() => {
     const fetchVideos = async () => {
       try {
+        // Making a request to fetch videos from the API
         const response = await fetch('http://localhost:8000/api/videos'); 
         if (!response.ok) {
           throw new Error('Failed to fetch videos');
         }
+        // Parse the response data to JSON
         const data = await response.json();
+        // Update the videos state with the fetched data
         setVideos(data);
       } catch (err) {
         setError(err.message);
@@ -31,7 +39,7 @@ const HomePage = ({ sideNavbar }) => {
     };
 
     fetchVideos();
-  }, []);
+  }, []); // Empty dependency array means this effect runs only once after the initial render
 
   return (
     <div className={sideNavbar ? 'homepage' : 'fullHomePage'}>
@@ -72,10 +80,6 @@ const HomePage = ({ sideNavbar }) => {
         </div>
       </Link>
       ))}
-
-
-
-
       </div>
     </div>
   );

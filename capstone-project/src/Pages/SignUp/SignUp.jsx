@@ -16,9 +16,9 @@ const Signup = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+  // Fetch hook with enhanced error handling
   const { data, loading, error } = useFetch('http://localhost:8000/api/users/signup', 'POST', submitData);
 
-  // Handle input fields
   const handleInputField = (event, name) => {
     setSignUpField({
       ...signUpField,
@@ -39,19 +39,17 @@ const Signup = () => {
         body: data,
       });
       const result = await response.json();
-      const imageUrl = result.url;
-      setUploadedImgUrl(imageUrl);
+      setUploadedImgUrl(result.url);
 
       setSignUpField({
         ...signUpField,
-        profilePic: imageUrl,
+        profilePic: result.url,
       });
     } catch (err) {
-      console.log(err);
+      console.log("Image upload error:", err);
     }
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -59,6 +57,8 @@ const Signup = () => {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
+
+    console.log("Submitting signup data:", signUpField);
 
     setSubmitData({
       username: signUpField.username,
@@ -68,7 +68,6 @@ const Signup = () => {
     });
   };
 
-  // Handle the response and errors
   useEffect(() => {
     if (data) {
       if (data.token) {
@@ -78,6 +77,7 @@ const Signup = () => {
     }
 
     if (error) {
+      console.log("Signup error:", error);
       setErrorMessage("Signup failed. Please try again.");
     }
   }, [data, error, navigate]);
@@ -110,4 +110,3 @@ const Signup = () => {
 };
 
 export default Signup;
-

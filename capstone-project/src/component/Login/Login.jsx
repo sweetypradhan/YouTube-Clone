@@ -50,8 +50,13 @@ const Login = ({ setLoginModal }) => {
           console.log("Login response data:", data);
 
           if (response.ok) {
+
+            // Save the JWT token in localStorage
+            localStorage.setItem('jwt', data.token);
+
+
             navigate('/'); // Redirect to the home page after successful login
-            setLoginModal(); // Close the modal if applicable
+            setLoginModal(); // Close the modal
           } else {
             setErrorMessage(data.message || "Login failed. Please try again.");
             alert("Invalid username or password. Please try again."); // Alert message for invalid credentials

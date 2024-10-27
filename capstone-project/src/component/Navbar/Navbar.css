@@ -130,6 +130,8 @@
     background-color: whitesmoke;
     padding: 10px;
     cursor: pointer;
+    display: block; 
+    width: 100%; 
     &:hover{
         background-color: beige;
     }
