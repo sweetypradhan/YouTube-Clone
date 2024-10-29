@@ -83,7 +83,7 @@ const ChannelPage = () => {
       const data = await response.json();
       if (response.ok) {
         console.log("Channel created successfully:", data);
-        navigate(`/`); // Navigate to the homepage after creating the channel
+        navigate(`/home`); // Navigate to the homepage after creating the channel
       } else {
         setErrorMessage(data.message || "Failed to create channel.");
       }

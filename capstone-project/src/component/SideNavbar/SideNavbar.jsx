@@ -25,6 +25,8 @@ import SupportIcon from '@mui/icons-material/Support';
 import FlagIcon from '@mui/icons-material/Flag';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import FeedbackIcon from '@mui/icons-material/Feedback';
+import { Link } from "react-router-dom";
+
 
 const SideNavbar = ({sideNavbar}) => {
   return (
@@ -33,7 +35,8 @@ const SideNavbar = ({sideNavbar}) => {
           <div className="homeSideNavbarTop">
             <div className={`homeSideNavbarTopOption`} >
                 <HomeIcon />
-                <div className="homeSideNavbarTopOptionTitle">Home</div>
+                {/* <div className="homeSideNavbarTopOptionTitle">Home</div> */}
+                <Link to={'/home'} className="homeSideNavbarTopOptionTitle" style={{textDecoration:"none", color:"black"}}>Home</Link>
             </div>
 
             <div className={`homeSideNavbarTopOption`} >

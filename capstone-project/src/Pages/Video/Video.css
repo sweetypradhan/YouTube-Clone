@@ -3,7 +3,7 @@
 .video {
     margin-top: 55px;
     display: flex;
-    padding: 30px 0;
+    padding: 30px 10px;
     justify-content: center;
 }
 
@@ -280,6 +280,7 @@
 @media (max-width: 768px) {
     .video {
         padding: 15px;
+        padding-right: 10px;
     }
 
     .video_youtube_video {

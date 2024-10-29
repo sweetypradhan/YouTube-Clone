@@ -56,8 +56,9 @@ export const loginUser = async (req, res) => {
         // Generate JWT token
         const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
 
-
-        res.json({ token, user });
+        // Send token and user data in the response, including profilePic
+        res.json({ token, user: { ...user._doc, profilePic: user.profilePic } });
+        
     } catch (error) {
         res.status(500).json({ message: "Error logging in" });
     }

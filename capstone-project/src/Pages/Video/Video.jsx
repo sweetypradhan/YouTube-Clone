@@ -47,16 +47,19 @@ const Video = () => {
         };
 
         fetchVideo();
+        
     }, [id]);
+
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('jwt'); // Retrieve the JWT token from localStorage
-
+    
         // Retrieve user's username and profile image from localStorage
         const username = localStorage.getItem('username'); 
         const profileImage = localStorage.getItem('userProfileImage'); 
 
+    
         try {
             const response = await fetch(`http://localhost:8000/api/comments/`, {
                 method: 'POST',
@@ -66,27 +69,30 @@ const Video = () => {
                 },
                 body: JSON.stringify({ text: message, videoId: id }),
             });
-
+    
             if (!response.ok) {
                 const errorResponse = await response.json();
                 console.error(errorResponse);
                 throw new Error('Failed to add comment');
             }
-
+    
             const newComment = await response.json();
             
             // Add user's profile data to the new comment object
             newComment.userId = {
-                channelName: username,
-                profilePic: profileImage,
+                username: username || 'subham sinha', 
+                profilePic: profileImage || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTCkZ5qZwRgDe1REogRmfaYbXB8gM0Txgr5EBWkaGVR2FsY_1VO3Y6uCA&s', 
             };
-
-            setComments((prevComments) => [...prevComments, newComment]); // Update comments
+    
+            setComments((prevComments) => [newComment, ...prevComments]); // Update comments with the new comment at the top
             setMessage(""); // Clear the input field
         } catch (err) {
             setError(err.message);
         }
     };
+
+    
+
 
     if (loading) return <p>Loading video...</p>;
     if (error) return <p className="error-message">{error}</p>;

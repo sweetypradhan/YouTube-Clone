@@ -35,8 +35,8 @@ const Login = ({ setLoginModal }) => {
 
   // Send POST request to login API
   useEffect(() => {
-    if (submitData) {
-      const loginUser = async () => {
+    const loginUser = async () => {
+      if (submitData) {
         try {
           const response = await fetch('http://localhost:8000/api/users/login', { 
             method: 'POST',
@@ -51,25 +51,25 @@ const Login = ({ setLoginModal }) => {
 
           if (response.ok) {
 
-            // Save the JWT token in localStorage
-            localStorage.setItem('jwt', data.token);
+             // Save the JWT token in localStorage
+             localStorage.setItem('jwt', data.token);
 
+            localStorage.setItem('user', JSON.stringify(data.user)); // Save user data
 
-            navigate('/'); // Redirect to the home page after successful login
+            navigate('/home'); // Redirect to the home page after successful login
             setLoginModal(); // Close the modal
           } else {
+            // Handle login failure
             setErrorMessage(data.message || "Login failed. Please try again.");
-            alert("Invalid username or password. Please try again."); // Alert message for invalid credentials
           }
         } catch (error) {
           console.error("Error logging in:", error);
           setErrorMessage("An error occurred. Please try again.");
-          alert("An error occurred. Please try again."); // Alert for any other errors
         }
-      };
+      }
+    };
 
-      loginUser();
-    }
+    loginUser();
   }, [submitData, navigate, setLoginModal]);
 
   return (
@@ -78,8 +78,22 @@ const Login = ({ setLoginModal }) => {
         <h2>Login</h2>
         {errorMessage && <p className="error_message">{errorMessage}</p>}
         <form className="login_form" onSubmit={handleSubmit}>
-          <input type="text" placeholder="Username" value={loginField.username} onChange={(e) => handleOnChangeInput(e, "username")} className="input_field" required />
-          <input type="password" placeholder="Password" value={loginField.password} onChange={(e) => handleOnChangeInput(e, "password")} className="input_field" required />
+          <input 
+            type="text" 
+            placeholder="Username" 
+            value={loginField.username} 
+            onChange={(e) => handleOnChangeInput(e, "username")} 
+            className="input_field" 
+            required 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={loginField.password} 
+            onChange={(e) => handleOnChangeInput(e, "password")} 
+            className="input_field" 
+            required 
+          />
           <button type="submit" className="login_button">Login</button>
         </form>
         <div className="button_group">

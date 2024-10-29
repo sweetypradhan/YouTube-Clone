@@ -101,7 +101,7 @@ const Signup = () => {
           <button type="submit" className="signup_button" disabled={loading}>Sign Up</button>
           {loading && <p>Signing up...</p>}
         </form>
-        <Link to={'/'} className="button_group">
+        <Link to={'/home'} className="button_group">
           <button className="link_button">Home page</button>
         </Link>
       </div>
